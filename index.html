@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Scanner</title>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <style>
+        #reader {
+            width: 300px;
+            height: 300px;
+            margin: auto;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        #result {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 18px;
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="reader"></div>
+    <div id="result"></div>
+
+    <script>
+        // Initialize the QR Code scanner
+        const scanner = new Html5QrcodeScanner('reader', {
+            qrbox: {
+                width: 250,
+                height: 250
+            },
+            fps: 10, // Reduced FPS for better performance
+        });
+
+        // Success callback
+        function onScanSuccess(decodedText, decodedResult) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `Scanned Result: <strong>${decodedText}</strong>`;
+            console.log('Decoded Text:', decodedText);
+            console.log('Decoded Result:', decodedResult);
+
+            // Optionally, stop the scanner after a successful scan
+            scanner.clear();
+        }
+
+        // Error callback
+        function onScanError(errorMessage) {
+            console.error('Error Scanning:', errorMessage);
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `<span class="error">Scanning error: ${errorMessage}</span>`;
+        }
+
+        // Render the scanner
+        scanner.render(onScanSuccess, onScanError);
+    </script>
+</body>
+</html>
